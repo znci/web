@@ -1,0 +1,36 @@
+{
+    "type": "site",
+    "owner": {
+        "auth": "github",
+        "id": 0
+    },
+    "id": 1000,
+    "meta": {
+        "title": "My Awesome Website",
+        "content": [
+            {
+                "block": "text",
+                "content": "string",
+                "id": 0
+            },
+            {
+                "block": "image",
+                "content": "url_to_image",
+                "id": 1
+            },
+            {
+                "block": "custom",
+                "content": "html",
+                "id": 2
+            },
+            {
+                "block": "markdown",
+                "content": "markdown_file_path",
+                "id": 2
+            }
+        ]
+    },
+    "blacklisted": false,
+    "permission": 0,
+    "editors": [{"auth": "github", "id": 0}, {"auth": "discord", "id": 1}]
+}
