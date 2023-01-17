@@ -1,0 +1,45 @@
+{
+    "type": "site",
+    "ownerObject": {
+        "id": 0
+    },
+    "id": 8199,
+    "meta": {
+        "title": "My Awesome Website",
+        "content": [
+            {
+                "block": "text",
+                "content": "string",
+                "id": 0
+            },
+            {
+                "block": "text",
+                "content": "this is some text",
+                "id": 1
+            },
+            {
+                "block": "text",
+                "content": "this is some text",
+                "id": 2
+            },
+            {
+                "block": "text",
+                "content": "this is some text",
+                "id": 3
+            },
+            {
+                "block": "text",
+                "content": "this is some text",
+                "id": 4
+            },
+            {
+                "block": "text",
+                "content": "this is some text",
+                "id": 5
+            }
+        ]
+    },
+    "blacklisted": false,
+    "permission": 0,
+    "editors": []
+}
