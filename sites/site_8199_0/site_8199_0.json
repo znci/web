@@ -36,6 +36,21 @@
                 "block": "text",
                 "content": "this is some text",
                 "id": 5
+            },
+            {
+                "block": "markdown",
+                "content": "<h1 id=\"hello\">Hello</h1>\n<p>this is a test</p>\n",
+                "id": 6
+            },
+            {
+                "block": "custom",
+                "content": "\n<h1>sup</h1>\n",
+                "id": 7
+            },
+            {
+                "block": "image",
+                "content": "<img src=https://google.com></img>",
+                "id": 8
             }
         ]
     },
