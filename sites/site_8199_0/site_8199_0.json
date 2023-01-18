@@ -1,60 +1,60 @@
 {
-    "type": "site",
-    "ownerObject": {
+  "type": "site",
+  "ownerObject": {
+    "id": 0
+  },
+  "id": 8199,
+  "meta": {
+    "title": "My Awesome Website",
+    "content": [
+      {
+        "block": "text",
+        "content": "string",
         "id": 0
-    },
-    "id": 8199,
-    "meta": {
-        "title": "My Awesome Website",
-        "content": [
-            {
-                "block": "text",
-                "content": "string",
-                "id": 0
-            },
-            {
-                "block": "text",
-                "content": "this is some text",
-                "id": 1
-            },
-            {
-                "block": "text",
-                "content": "this is some text",
-                "id": 2
-            },
-            {
-                "block": "text",
-                "content": "this is some text",
-                "id": 3
-            },
-            {
-                "block": "text",
-                "content": "this is some text",
-                "id": 4
-            },
-            {
-                "block": "text",
-                "content": "this is some text",
-                "id": 5
-            },
-            {
-                "block": "markdown",
-                "content": "<h1 id=\"hello\">Hello</h1>\n<p>this is a test</p>\n",
-                "id": 6
-            },
-            {
-                "block": "custom",
-                "content": "\n<h1>sup</h1>\n",
-                "id": 7
-            },
-            {
-                "block": "image",
-                "content": "<img src=https://google.com></img>",
-                "id": 8
-            }
-        ]
-    },
-    "blacklisted": false,
-    "permission": 0,
-    "editors": []
+      },
+      {
+        "block": "text",
+        "content": "this is some text",
+        "id": 1
+      },
+      {
+        "block": "text",
+        "content": "this is some text",
+        "id": 2
+      },
+      {
+        "block": "text",
+        "content": "this is some text",
+        "id": 3
+      },
+      {
+        "block": "text",
+        "content": "this is some text",
+        "id": 4
+      },
+      {
+        "block": "text",
+        "content": "this is some text",
+        "id": 5
+      },
+      {
+        "block": "markdown",
+        "content": "<h1 id=\"hello\">Hello</h1>\n<p>this is a test</p>\n",
+        "id": 6
+      },
+      {
+        "block": "custom",
+        "content": "\n<h1>sup</h1>\n",
+        "id": 7
+      },
+      {
+        "block": "image",
+        "content": "<img src=https://google.com></img>",
+        "id": 8
+      }
+    ]
+  },
+  "blacklisted": false,
+  "permission": 0,
+  "editors": []
 }
