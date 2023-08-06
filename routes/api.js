@@ -1,28 +1,37 @@
-var express = require("express");
-var router = express.Router();
-var fs = require("fs");
-var zwss = require("../lib/zwss.js");
-var path = require("path");
-var yaml = require("yaml");
+const express = require("express");
+const router = express.Router();
+const fs = require("fs");
+const zwss = require("../lib/zwss.js");
+const path = require("path");
+const yaml = require("yaml");
 
 /* New ZWSS file. */
 router.get("/new", function (req, res, next) {
-  var site = zwss.generate();
-  var ps = yaml.parse(site);
-  console.log(site);
+  const site = zwss.generate();
+  const ps = yaml.parse(site);
+
   fs.writeFileSync(path.join("./public/hosted/" + ps.id + ".zwss"), site);
   res.status(200).send({ msg: "ok", id: ps.id });
 });
 
-/* GET ZWSS file. */
+/* Get ZWSS file. */
 router.get("/:id", function (req, res, next) {
-  var id = req.params.id;
-  // try to read and catch errors
+  const { id } = req.params;
+
+  if (id.includes("..")) {
+    res.status(400).send({
+      msg: "bad request (invalid id)",
+      meta: "https://http.cat/400",
+    });
+    return;
+  }
+
   try {
-    var zwssFile = fs.readFileSync(
+    const zwssFile = fs.readFileSync(
       path.join("./public/hosted/" + id + ".zwss"),
       "utf8"
     );
+
     res.send(zwssFile);
   } catch (err) {
     res.status(404).send({ msg: "not found", meta: "https://http.cat/404" });
@@ -31,35 +40,65 @@ router.get("/:id", function (req, res, next) {
 
 /* Update ZWSS file. (add/remove blocks) */
 router.put("/:id", function (req, res, next) {
-  var id = req.params.id;
+  const { id } = req.params;
+  const { type, block, index } = req.query;
+
+  if (id.includes("..")) {
+    res.status(400).send({
+      msg: "bad request (invalid id)",
+      meta: "https://http.cat/400",
+    });
+    return;
+  }
+
+  if (!type) {
+    res.status(400).send({
+      msg: "bad request (missing type)",
+      meta: "https://http.cat/400",
+    });
+  }
+
   try {
-    var zwssFile = fs.readFileSync(
+    let zwssFile = fs.readFileSync(
       path.join("./public/hosted/" + id + ".zwss"),
       "utf8"
     );
+
+    switch (type) {
+      case "add":
+        if (!block) {
+          res.status(400).send({
+            msg: "bad request (missing block)",
+            meta: "https://http.cat/400",
+          });
+          return;
+        }
+
+        zwssFile = zwss.addBlock(zwssFile, block);
+        break;
+      case "remove":
+        if (!index) {
+          res.status(400).send({
+            msg: "bad request (missing index)",
+            meta: "https://http.cat/400",
+          });
+          return;
+        }
+
+        zwssFile = zwss.removeBlock(zwssFile, index);
+        break;
+      default:
+        res.status(400).send({
+          msg: "bad request (invalid type)",
+          meta: "https://http.cat/400",
+        });
+    }
+
+    fs.writeFileSync(path.join("./public/hosted/" + id + ".zwss"), zwssFile);
+    res.status(200).send({ msg: "ok" });
   } catch (err) {
-    res.status(404).send({ msg: "not found", meta: "https://http.cat/404" });
+    res.status(400).send({ msg: "bad request", meta: "https://http.cat/400" });
   }
-  var a = req.query;
-  if (a.type == "add") {
-    try {
-      zwssFile = zwss.addBlock(zwssFile, a.block);
-    } catch (err) {
-      res
-        .status(400)
-        .send({ msg: "bad request", meta: "https://http.cat/400" });
-    }
-  } else if (a.type == "remove") {
-    try {
-      zwssFile = zwss.removeBlock(zwssFile, a.index);
-    } catch (err) {
-      res
-        .status(400)
-        .send({ msg: "bad request", meta: "https://http.cat/400" });
-    }
-  }
-  fs.writeFileSync(path.join("./public/hosted/" + id + ".zwss"), zwssFile);
-  res.status(200).send({ msg: "ok" });
 });
 
 module.exports = router;
