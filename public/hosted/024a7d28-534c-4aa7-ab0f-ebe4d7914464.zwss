@@ -1,0 +1,19 @@
+type: page
+title: Hello World!
+id: 024a7d28-534c-4aa7-ab0f-ebe4d7914464
+body:
+  blocks:
+    - type: heading
+      text: Welcome to ZWSS!
+    - type: paragraph
+      text: >-
+        This is a ZWSS file.
+
+
+        ZWSS is a simple schema for describing a web site.
+
+
+        It is used by znci/web to parse a web site and return viewable HTML in a browser.
+
+
+        It is powered by a custom parser.
