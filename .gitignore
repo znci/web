@@ -62,3 +62,8 @@ typings/
 
 # Package Lock
 package-lock.json
+package-lock.json
+
+# Firebase
+serviceAccountKey.json
+
