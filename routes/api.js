@@ -90,7 +90,6 @@ router.use(checker);
 /* New ZWSS file. */
 router.get("/new", function (req, res, next) {
   const { contents, id } = zwss.generate();
-
   // add site to db
   db.collection("sites")
     .doc(id)
@@ -114,17 +113,6 @@ router.get("/new", function (req, res, next) {
 /* Get ZWSS file. */
 router.get("/:id", function (req, res, next) {
   const { id } = req.params;
-
-  var headers = req.headers;
-  if (!headers["x-api-key"]) {
-    return next(createError(401, "unauthorized"));
-  }
-  const key = headers["x-api-key"];
-  const { user_id } = headers["x-user"];
-  if (!checkKeyValid(id, user_id, key)) {
-    return next(createError(401, "unauthorized"));
-  }
-
   if (id.includes("..")) {
     return next(createError(400, "bad request (invalid id)"));
   }
@@ -146,16 +134,6 @@ router.get("/:id", function (req, res, next) {
 /* Update ZWSS file. (add/remove blocks) */
 router.put("/:id", function (req, res, next) {
   const { id } = req.params;
-
-  var headers = req.headers;
-  if (!headers["x-api-key"]) {
-    return next(createError(401, "unauthorized"));
-  }
-  const key = headers["x-api-key"];
-  const { user_id } = headers["x-user"];
-  if (!checkKeyValid(id, user_id, key)) {
-    return next(createError(401, "unauthorized"));
-  }
   const { type, index } = req.query;
   const { block } = req.body;
 
