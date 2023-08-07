@@ -4,6 +4,7 @@ const fs = require("fs");
 const zwss = require("../lib/zwss.js");
 const path = require("path");
 const yaml = require("yaml");
+const createError = require("http-errors");
 
 /* New ZWSS file. */
 router.get("/new", function (req, res, next) {
@@ -19,11 +20,7 @@ router.get("/:id", function (req, res, next) {
   const { id } = req.params;
 
   if (id.includes("..")) {
-    res.status(400).send({
-      msg: "bad request (invalid id)",
-      meta: "https://http.cat/400",
-    });
-    return;
+    return next(createError(400, "bad request (invalid id)"));
   }
 
   try {
@@ -34,7 +31,7 @@ router.get("/:id", function (req, res, next) {
 
     res.send(zwssFile);
   } catch (err) {
-    res.status(404).send({ msg: "not found", meta: "https://http.cat/404" });
+    next(createError(404, "not found"));
   }
 });
 
@@ -44,18 +41,11 @@ router.put("/:id", function (req, res, next) {
   const { type, block, index } = req.query;
 
   if (id.includes("..")) {
-    res.status(400).send({
-      msg: "bad request (invalid id)",
-      meta: "https://http.cat/400",
-    });
-    return;
+    return next(createError(400, "bad request (invalid id)"));
   }
 
   if (!type) {
-    res.status(400).send({
-      msg: "bad request (missing type)",
-      meta: "https://http.cat/400",
-    });
+    return next(createError(400, "bad request (missing type)"));
   }
 
   try {
@@ -67,22 +57,14 @@ router.put("/:id", function (req, res, next) {
     switch (type) {
       case "add":
         if (!block) {
-          res.status(400).send({
-            msg: "bad request (missing block)",
-            meta: "https://http.cat/400",
-          });
-          return;
+          return next(createError(400, "bad request (missing block)"));
         }
 
         zwssFile = zwss.addBlock(zwssFile, block);
         break;
       case "remove":
         if (!index) {
-          res.status(400).send({
-            msg: "bad request (missing index)",
-            meta: "https://http.cat/400",
-          });
-          return;
+          return next(createError(400, "bad request (missing index)"));
         }
 
         zwssFile = zwss.removeBlock(zwssFile, index);
@@ -97,7 +79,7 @@ router.put("/:id", function (req, res, next) {
     fs.writeFileSync(path.join("./public/hosted/" + id + ".zwss"), zwssFile);
     res.status(200).send({ msg: "ok" });
   } catch (err) {
-    res.status(400).send({ msg: "bad request", meta: "https://http.cat/400" });
+    next(createError(400, "bad request"));
   }
 });
 
