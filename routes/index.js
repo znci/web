@@ -4,7 +4,14 @@ var zwss = require("../lib/zwss.js");
 var fs = require("fs");
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+  if (!req.session) {
+    req.session = {};
+  }
+
+  res.render("index", {
+    title: "Express",
+    session: JSON.stringify(req.session)
+  });
 });
 
 router.get("/:page", function (req, res, next) {
