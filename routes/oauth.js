@@ -1,24 +1,31 @@
-var express = require("express");
-var router = express.Router();
-var XMLHttpRequest = require("xmlhttprequest-ssl").XMLHttpRequest;
-var session = require("express-session");
+const express = require("express");
+const router = express.Router();
+const XMLHttpRequest = require("xmlhttprequest-ssl").XMLHttpRequest;
+const session = require("express-session");
+const db = require("../lib/firebase.js");
+const { v4: uuidv4 } = require("uuid");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 router.use(
   session({
-    secret: "mFFBfPaJJtlgH1Nla6hT3jRGyAaR0NMh"
+    secret: process.env.SESSION_SECRET
   })
 );
 
 router.get("/login", function (req, res, next) {
   res.redirect(
-    "https://discord.com/api/oauth2/authorize?client_id=1137864637380034660&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Foauth%2Fcallback&response_type=code&scope=identify"
+    `https://discord.com/api/oauth2/authorize?client_id=${
+      process.env.CLIENT_ID
+    }&redirect_uri=${encodeURI(
+      process.env.REDIRECT_URI
+    )}&response_type=code&scope=identify`
   );
 });
 
 var auth_settings = {
-  client_id: "1137864637380034660",
-  client_secret: "mFFBfPaJJtlgH1Nla6hT3jRGyAaR0NMh", // STAGING creds
-  redirect_uri: "http://127.0.0.1:3000/oauth/callback",
+  client_id: process.env.CLIENT_ID,
+  client_secret: process.env.CLIENT_SECRET,
+  redirect_uri: process.env.REDIRECT_URI,
   grant_type: "authorization_code"
 };
 
@@ -37,7 +44,20 @@ router.get("/callback", function (req, res, next) {
         if (xhr2.status == 200) {
           var json2 = JSON.parse(xhr2.responseText);
           req.session.user = json2;
-          console.log(req.session.user);
+          db.collection("users")
+            .where("id", "==", json2.id)
+            .get()
+            .then((snapshot) => {
+              if (snapshot.empty) {
+                db.collection("users").doc(json2.id).set({
+                  id: json2.id,
+                  username: json2.username,
+                  sites: [],
+                  managedSites: [],
+                  apiKey: uuidv4()
+                });
+              }
+            });
           res.redirect("/");
         }
       };
