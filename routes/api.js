@@ -8,11 +8,10 @@ const createError = require("http-errors");
 
 /* New ZWSS file. */
 router.get("/new", function (req, res, next) {
-  const site = zwss.generate();
-  const ps = yaml.parse(site);
+  const { contents, id } = zwss.generate();
 
-  fs.writeFileSync(path.join("./public/hosted/" + ps.id + ".zwss"), site);
-  res.status(200).send({ msg: "ok", id: ps.id });
+  fs.writeFileSync(path.join("./public/hosted/" + id + ".zwss"), contents);
+  res.status(200).send({ msg: "ok", id });
 });
 
 /* Get ZWSS file. */
