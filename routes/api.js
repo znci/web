@@ -37,7 +37,8 @@ router.get("/:id", function (req, res, next) {
 /* Update ZWSS file. (add/remove blocks) */
 router.put("/:id", function (req, res, next) {
   const { id } = req.params;
-  const { type, block, index } = req.query;
+  const { type, index } = req.query;
+  const { block } = req.body;
 
   if (id.includes("..")) {
     return next(createError(400, "bad request (invalid id)"));
