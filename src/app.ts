@@ -9,8 +9,9 @@ import { default as indexRouter } from "./routes/index.ts";
 import { default as apiRouter } from "./routes/api.ts";
 import { default as oauthRouter } from "./routes/oauth.ts";
 import session from "express-session";
+import { configDotenv } from "dotenv";
 
-require("dotenv").config({ path: path.join(__dirname, "./.env") });
+configDotenv({ path: path.join(__dirname, "./.env") });
 const app: express.Application = express();
 
 /**
