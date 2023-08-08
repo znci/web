@@ -6,12 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // get hidden input value
-var apiKey = document.getElementById("apikey_hidden");
+var hidden_input = document.getElementById("apikey_hidden");
 document.getElementById("api_key").addEventListener("mouseover", function () {
   let api_key = document.getElementById("api_key");
-  // no quotes
-
-  api_key.innerHTML = apiKey.value;
+  api_key.innerHTML = hidden_input.value;
 });
 
 document.getElementById("api_key").addEventListener("mouseout", function () {
