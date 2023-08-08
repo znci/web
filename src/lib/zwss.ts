@@ -127,7 +127,7 @@ zwss.render = function (contents) {
       }
     }
 
-    html += `<script src="/hosted/rs/tc.js"></script>
+    html += `
     </body>
     </html>`;
   }
