@@ -14,10 +14,6 @@ import { configDotenv } from "dotenv";
 configDotenv({ path: path.join(__dirname, "./.env") });
 const app: express.Application = express();
 
-/**
- * Express Session
- */
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
