@@ -1,14 +1,13 @@
-const admin = require("firebase-admin");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+import admin from "firebase-admin";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { configDotenv } from "dotenv";
+configDotenv();
 
-const serviceAccount = require(path.join(
-  __dirname,
-  "../serviceAccountKey.json"
-));
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY!);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
 });
 
 const db = admin.firestore();
@@ -20,10 +19,11 @@ db.collection("users")
     if (snapshot.empty) {
       db.collection("users").doc("default").set({
         id: "0",
+        name: "Webmaster",
         username: "webmaster",
         sites: [],
         managedSites: [],
-        apiKey: uuidv4() // generate random api key, can be reset at will of user
+        apiKey: uuidv4(), // generate random api key, can be reset at will of user
       });
     }
   });
@@ -37,9 +37,9 @@ db.collection("sites")
         id: "0",
         owner: "0",
         managers: [],
-        b64_zwss: "e30="
+        b64_zwss: "e30=",
       });
     }
   });
 
-module.exports = db;
+export { db };

@@ -3,11 +3,21 @@
 // It is used by znci/web to parse a web site and return viewable HTML in a browser.
 //
 
-const yaml = require("yaml");
-const uuidv4 = require("uuid").v4;
-const { z } = require("zod");
+import yaml from "yaml";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import { ZwssYaml, Block } from "../types/types.js";
 
-let zwss = {};
+type zwss = {
+  validateObject: (doc: object) => object;
+  validateString: (contents: string) => object;
+  render: (contents: string) => string;
+  generate: () => { contents: string; id: string };
+  addBlock: (contents: string, block: object) => string;
+  removeBlock: (oldContents: string, index: number) => string;
+};
+
+let zwss: zwss = {} as zwss;
 
 /**
  * Validate a ZWSS file from an object
@@ -55,7 +65,7 @@ zwss.validateObject = function (doc) {
  * @returns ZWSS object
  * @throws {Error} Will throw an error if the document does not match the schema
  */
-zwss.validateString = function (contents) {
+zwss.validateString = function (contents): ZwssYaml {
   let doc;
 
   try {
@@ -64,7 +74,7 @@ zwss.validateString = function (contents) {
     throw new Error("Invalid ZWSS file.");
   }
 
-  return zwss.validateObject(doc);
+  return zwss.validateObject(doc)! as ZwssYaml;
 };
 
 /**
@@ -74,10 +84,10 @@ zwss.validateString = function (contents) {
  * @throws {Error} Will throw an error if the document is invalid
  */
 zwss.render = function (contents) {
-  let doc;
+  let doc: ZwssYaml;
 
   try {
-    doc = zwss.validateString(contents);
+    doc = zwss.validateString(contents)! as ZwssYaml;
   } catch (e) {
     throw new Error(`Invalid ZWSS file: ${e}`);
   }
@@ -104,7 +114,7 @@ zwss.render = function (contents) {
         html += `<h1>${doc.body.blocks[i].text}</h1>\n`;
       }
       if (doc.body.blocks[i].type == "paragraph") {
-        html += `<p>${doc.body.blocks[i].text.replaceAll(
+        html += `<p>${doc.body.blocks[i].text!.replaceAll(
           "\n",
           "<br />"
         )}</p>\n`;
@@ -117,7 +127,7 @@ zwss.render = function (contents) {
       }
     }
 
-    html += `<script src="/hosted/rs/tc.js"></script>
+    html += `
     </body>
     </html>`;
   }
@@ -167,20 +177,20 @@ zwss.generate = function () {
  * @returns ZWSS formatted YAML
  */
 zwss.addBlock = function (contents, block) {
-  let doc;
+  let doc: ZwssYaml;
 
   try {
-    doc = zwss.validateString(contents);
+    doc = zwss.validateString(contents)! as ZwssYaml;
   } catch (e) {
-    throw new Error(e);
+    throw new Error(e as unknown as string);
   }
 
-  doc.body.blocks.push(block);
+  doc.body.blocks.push(block as unknown as Block);
 
   try {
-    zwss.validateString(doc);
+    zwss.validateString(doc as unknown as string);
   } catch (e) {
-    throw new Error(e);
+    throw new Error(e as unknown as string);
   }
 
   return yaml.stringify(doc);
@@ -209,4 +219,4 @@ zwss.removeBlock = function (oldContents, index) {
   return yaml.stringify(doc);
 };
 
-module.exports = zwss;
+export { zwss };
