@@ -5,24 +5,25 @@ import createError from "http-errors";
 import * as path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import { default as indexRouter } from "./routes/index.ts";
-import { default as apiRouter } from "./routes/api.ts";
-import { default as oauthRouter } from "./routes/oauth.ts";
+import { default as indexRouter } from "./routes/index.js";
+import { default as apiRouter } from "./routes/api.js";
+import { default as oauthRouter } from "./routes/oauth.js";
 import session from "express-session";
 import { configDotenv } from "dotenv";
+import { dirname } from "path";
 
-configDotenv({ path: path.join(__dirname, "./.env") });
+configDotenv();
 const app: express.Application = express();
 
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(dirname("src"), "views"));
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(dirname("src"), "public")));
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,

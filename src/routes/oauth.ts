@@ -2,13 +2,11 @@
 import * as express from "express";
 import { db } from "../lib/firebase.js";
 import { v4 as uuidv4 } from "uuid";
-import fetch from "node-fetch";
 import * as path from "path";
 import { configDotenv } from "dotenv";
-configDotenv({
-  path: path.join(__dirname, "../.env"),
-});
-const router: express.Router = express.Router();
+import { fetch } from "cross-fetch";
+
+const router = express.Router(); 
 
 router.get("/login", function (req, res, next) {
   res.redirect(

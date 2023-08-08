@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 
-import * as app from "./app.ts";
+import { app }from "./app.js";
 import debug from "debug";
 debug("web:server");
 import * as http from "http";
@@ -14,7 +14,6 @@ import Express from "express";
 
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port as number);
-
 /**
  * Create HTTP server.
  */

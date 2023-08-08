@@ -2,14 +2,17 @@
   "name": "web",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b -v",
     "start": "node ./bin/www.js",
-    "dev": "nodemon -e ejs,ts,css tsc && ./bin/www.js"
+    "dev": "nodemon -e ejs,ts,css tsc && ./bin/www.js",
+	"br": "tsc -b -v && node ./bin/www.js"
   },
   "dependencies": {
     "api-key-auth": "^0.2.3",
     "cookie-parser": "~1.4.6",
+    "cross-fetch": "^4.0.0",
     "debug": "~4.3.4",
     "dotenv": "^16.3.1",
     "ejs": "~3.1.9",
@@ -18,7 +21,6 @@
     "firebase-admin": "^11.10.1",
     "http-errors": "~2.0.0",
     "morgan": "~1.10.0",
-    "node-fetch": "^3.3.2",
     "toml": "^3.0.0",
     "typescript": "^5.1.6",
     "uuid": "^9.0.0",
@@ -37,6 +39,5 @@
     "@types/nodemon": "^1.19.2",
     "@types/uuid": "^9.0.2",
     "nodemon": "^3.0.1"
-  },
-  "type": "module"
+  }
 }

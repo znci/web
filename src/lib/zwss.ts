@@ -6,7 +6,7 @@
 import yaml from "yaml";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { ZwssYaml, Block } from "../types/types.ts";
+import { ZwssYaml, Block } from "../types/types.js";
 
 type zwss = {
   validateObject: (doc: object) => object;

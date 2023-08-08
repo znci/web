@@ -1,11 +1,10 @@
 import admin from "firebase-admin";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import { configDotenv } from "dotenv";
+configDotenv();
 
-const serviceAccount = require(path.join(
-  __dirname,
-  "../serviceAccountKey.json"
-));
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY!);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
