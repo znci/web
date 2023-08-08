@@ -22,7 +22,6 @@
     "toml": "^3.0.0",
     "typescript": "^5.1.6",
     "uuid": "^9.0.0",
-    "xmlhttprequest": "^1.8.0",
     "yaml": "^2.3.1",
     "zod": "^3.21.4"
   },
