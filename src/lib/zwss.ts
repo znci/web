@@ -9,14 +9,13 @@ import { z } from "zod";
 import { ZwssYaml, Block } from "../types/types.ts";
 
 type zwss = {
-	  validateObject: (doc: object) => object;
-	  validateString: (contents: string) => object;
-	  render: (contents: string) => string;
-	  generate: () => { contents: string; id: string };
-	  addBlock: (contents: string, block: object) => string;
-	  removeBlock: (oldContents: string, index: number) => string;
+  validateObject: (doc: object) => object;
+  validateString: (contents: string) => object;
+  render: (contents: string) => string;
+  generate: () => { contents: string; id: string };
+  addBlock: (contents: string, block: object) => string;
+  removeBlock: (oldContents: string, index: number) => string;
 };
-
 
 let zwss: zwss = {} as zwss;
 
@@ -36,25 +35,25 @@ zwss.validateObject = function (doc) {
         .union([
           z.object({
             type: z.literal("heading"),
-            text: z.string()
+            text: z.string(),
           }),
           z.object({
             type: z.literal("paragraph"),
-            text: z.string()
+            text: z.string(),
           }),
           z.object({
             type: z.literal("image"),
             url: z.string().url(),
-            alt: z.string()
+            alt: z.string(),
           }),
           z.object({
             type: z.literal("link"),
             url: z.string().url(),
-            text: z.string()
-          })
+            text: z.string(),
+          }),
         ])
-        .array()
-    })
+        .array(),
+    }),
   });
 
   return schema.parse(doc);
@@ -155,19 +154,19 @@ zwss.generate = function () {
       blocks: [
         {
           type: "heading",
-          text: "Welcome to ZWSS!"
+          text: "Welcome to ZWSS!",
         },
         {
           type: "paragraph",
-          text: "This is a ZWSS file.\n\nZWSS is a simple schema for describing a web site.\n\nIt is used by znci/web to parse a web site and return viewable HTML in a browser.\n\nIt is powered by a custom parser."
-        }
-      ]
-    }
+          text: "This is a ZWSS file.\n\nZWSS is a simple schema for describing a web site.\n\nIt is used by znci/web to parse a web site and return viewable HTML in a browser.\n\nIt is powered by a custom parser.",
+        },
+      ],
+    },
   };
 
   return {
     contents: yaml.stringify(doc),
-    id: doc.id
+    id: doc.id,
   };
 };
 

@@ -5,7 +5,10 @@ import * as Express from "express";
 
 async function check_user_key(user_id: string, key: string): Promise<boolean> {
   try {
-    const snapshot = await db.collection("users").where("id", "==", user_id).get();
+    const snapshot = await db
+      .collection("users")
+      .where("id", "==", user_id)
+      .get();
     if (snapshot.empty) {
       return false;
     }
@@ -21,9 +24,16 @@ async function check_user_key(user_id: string, key: string): Promise<boolean> {
   }
 }
 
-async function check_site_key(user_id: string, key: string, site_id: string): Promise<boolean> {
+async function check_site_key(
+  user_id: string,
+  key: string,
+  site_id: string
+): Promise<boolean> {
   try {
-    const siteSnapshot = await db.collection("sites").where("id", "==", site_id).get();
+    const siteSnapshot = await db
+      .collection("sites")
+      .where("id", "==", site_id)
+      .get();
     if (siteSnapshot.empty) {
       return false;
     }
@@ -31,7 +41,10 @@ async function check_site_key(user_id: string, key: string, site_id: string): Pr
     if (siteDoc.data().owner !== user_id) {
       return false;
     }
-    const userSnapshot = await db.collection("users").where("id", "==", user_id).get();
+    const userSnapshot = await db
+      .collection("users")
+      .where("id", "==", user_id)
+      .get();
     if (userSnapshot.empty) {
       return false;
     }
@@ -46,7 +59,11 @@ async function check_site_key(user_id: string, key: string, site_id: string): Pr
   }
 }
 
-async function checkKeyValid(user_id: string, key: string, site_id: string | null = null): Promise<boolean> {
+async function checkKeyValid(
+  user_id: string,
+  key: string,
+  site_id: string | null = null
+): Promise<boolean> {
   if (site_id === null) {
     const res = await check_user_key(user_id, key);
     return res;
@@ -56,27 +73,34 @@ async function checkKeyValid(user_id: string, key: string, site_id: string | nul
   }
 }
 
-
-function checker(req: Express.Request, res: Express.Response, next: Express.NextFunction): any {
-	const headers = req.headers;
-	const apiKey = Array.isArray(headers["x-api-key"]) ? headers["x-api-key"][0] : headers["x-api-key"];
-	const userId = Array.isArray(headers["x-user"]) ? headers["x-user"][0] : headers["x-user"];
-	if (!apiKey || !userId) {
-		return next(createError(401, "unauthorized"));
-	}
-	switch (req.method) {
-		case "GET":
-			if (!checkKeyValid(userId, apiKey)) {
-				return next(createError(401, "unauthorized"));
-			}
-			break;
-		default:
-			if (!checkKeyValid(userId, apiKey, req.params.site_id as string)) {
-				return next(createError(401, "unauthorized"));
-			}
-			break;
-	}
-	return next();
+function checker(
+  req: Express.Request,
+  res: Express.Response,
+  next: Express.NextFunction
+): any {
+  const headers = req.headers;
+  const apiKey = Array.isArray(headers["x-api-key"])
+    ? headers["x-api-key"][0]
+    : headers["x-api-key"];
+  const userId = Array.isArray(headers["x-user"])
+    ? headers["x-user"][0]
+    : headers["x-user"];
+  if (!apiKey || !userId) {
+    return next(createError(401, "unauthorized"));
+  }
+  switch (req.method) {
+    case "GET":
+      if (!checkKeyValid(userId, apiKey)) {
+        return next(createError(401, "unauthorized"));
+      }
+      break;
+    default:
+      if (!checkKeyValid(userId, apiKey, req.params.site_id as string)) {
+        return next(createError(401, "unauthorized"));
+      }
+      break;
+  }
+  return next();
 }
 
 export { checker };

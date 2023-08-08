@@ -8,7 +8,7 @@ const serviceAccount = require(path.join(
 ));
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount)
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
 });
 
 const db = admin.firestore();
@@ -24,7 +24,7 @@ db.collection("users")
         username: "webmaster",
         sites: [],
         managedSites: [],
-        apiKey: uuidv4() // generate random api key, can be reset at will of user
+        apiKey: uuidv4(), // generate random api key, can be reset at will of user
       });
     }
   });
@@ -38,7 +38,7 @@ db.collection("sites")
         id: "0",
         owner: "0",
         managers: [],
-        b64_zwss: "e30="
+        b64_zwss: "e30=",
       });
     }
   });

@@ -7,20 +7,14 @@ import { zwss } from "../lib/zwss.js";
 import { checker } from "../lib/auth.js";
 import { User, Site, SiteArray } from "../types/types.js";
 
-
 const router: express.Router = express.Router();
-
-
-
-
-
 
 router.use(checker);
 
 /* New ZWSS file. */
 router.get("/new", function (req, res, next) {
   const { contents, id } = zwss.generate();
-  const headers = req.headers
+  const headers = req.headers;
   // add site to db
   db.collection("sites")
     .doc(id)
@@ -28,14 +22,14 @@ router.get("/new", function (req, res, next) {
       id: id,
       owner: headers["x-user"],
       managers: [],
-      b64_zwss: Buffer.from(contents).toString("base64")
+      b64_zwss: Buffer.from(contents).toString("base64"),
     });
 
   // add site to user's sites
   db.collection("users")
     .doc(headers["x-user"] as string)
     .update({
-      sites: admin.firestore.FieldValue.arrayUnion(id)
+      sites: admin.firestore.FieldValue.arrayUnion(id),
     });
 
   res.status(200).send({ msg: "ok", id });
@@ -111,14 +105,14 @@ router.put("/:id", function (req, res, next) {
       default:
         res.status(400).send({
           msg: "bad request (invalid type)",
-          meta: "https://http.cat/400"
+          meta: "https://http.cat/400",
         });
     }
 
     db.collection("sites")
       .doc(id)
       .update({
-        b64_zwss: Buffer.from(zwssFile).toString("base64")
+        b64_zwss: Buffer.from(zwssFile).toString("base64"),
       });
 
     res.status(200).send({ msg: "ok" });

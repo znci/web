@@ -6,8 +6,8 @@ import fetch from "node-fetch";
 import * as path from "path";
 import { configDotenv } from "dotenv";
 configDotenv({
-	path: path.join(__dirname, "../.env")
-})
+  path: path.join(__dirname, "../.env"),
+});
 const router: express.Router = express.Router();
 
 router.get("/login", function (req, res, next) {
@@ -20,9 +20,8 @@ var auth_settings = {
   client_id: process.env.CLIENT_ID,
   client_secret: process.env.CLIENT_SECRET,
   redirect_uri: process.env.REDIRECT_URI,
-  grant_type: "authorization_code"
+  grant_type: "authorization_code",
 };
-
 
 router.get("/callback", async function (req, res, next) {
   const code = req.query.code;
@@ -71,13 +70,11 @@ router.get("/callback", async function (req, res, next) {
 });
 
 router.get("/logout", function (req, res, next) {
-  req.session.destroy(
-	function (err) {
-		if (err) {
-			console.error(err);
-		}
-	}
-  );
+  req.session.destroy(function (err) {
+    if (err) {
+      console.error(err);
+    }
+  });
   res.redirect("/");
 });
 

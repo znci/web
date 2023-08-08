@@ -10,7 +10,6 @@ import { default as apiRouter } from "./routes/api.ts";
 import { default as oauthRouter } from "./routes/oauth.ts";
 import session from "express-session";
 
-
 require("dotenv").config({ path: path.join(__dirname, "./.env") });
 const app: express.Application = express();
 
@@ -29,7 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET!
+    secret: process.env.SESSION_SECRET!,
   })
 );
 app.use("/", indexRouter);
@@ -57,6 +56,5 @@ app.use(function (err: any, req: any, res: any, next: any) {
 
 module.exports = app;
 export function set(arg0: string, port: any) {
-	throw new Error("Function not implemented.");
+  throw new Error("Function not implemented.");
 }
-
