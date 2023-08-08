@@ -46,7 +46,6 @@ app.use(function (err: any, req: any, res: any, next: any) {
     res.send({ msg: err.message, meta: "https://http.cat/" + err.status });
   } else {
     res.status(err.status || 500);
-    console.log(err);
     res.send(`<img src="https://http.cat/${err.status}" alt="error" />`);
   }
 });
