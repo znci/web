@@ -67,3 +67,6 @@ package-lock.json
 # Firebase
 serviceAccountKey.json
 
+# ts
+bin/
+

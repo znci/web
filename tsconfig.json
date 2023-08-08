@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2021", "DOM"],
+    "outDir": "./bin",
+    "allowJs": false,
+    "target": "ES2021",
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["./src/**/*"]
+}

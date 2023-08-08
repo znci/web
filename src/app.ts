@@ -1,14 +1,22 @@
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
+// app.ts
 
-const indexRouter = require("./routes/index");
-const apiRouter = require("./routes/api");
-const oauthRouter = require("./routes/oauth");
+import express from "express";
+import createError from "http-errors";
+import * as path from "path";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import { default as indexRouter } from "./routes/index.ts";
+import { default as apiRouter } from "./routes/api.ts";
+import { default as oauthRouter } from "./routes/oauth.ts";
+import session from "express-session";
 
-const app = express();
+
+require("dotenv").config({ path: path.join(__dirname, "./.env") });
+const app: express.Application = express();
+
+/**
+ * Express Session
+ */
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -19,7 +27,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!
+  })
+);
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 app.use("/oauth", oauthRouter);
@@ -29,7 +41,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err: any, req: any, res: any, next: any) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -38,8 +50,13 @@ app.use(function (err, req, res, next) {
     res.send({ msg: err.message, meta: "https://http.cat/" + err.status });
   } else {
     res.status(err.status || 500);
+    console.log(err);
     res.send(`<img src="https://http.cat/${err.status}" alt="error" />`);
   }
 });
 
 module.exports = app;
+export function set(arg0: string, port: any) {
+	throw new Error("Function not implemented.");
+}
+

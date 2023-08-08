@@ -1,6 +1,6 @@
-const admin = require("firebase-admin");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+import admin from "firebase-admin";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 const serviceAccount = require(path.join(
   __dirname,
@@ -8,7 +8,7 @@ const serviceAccount = require(path.join(
 ));
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount)
 });
 
 const db = admin.firestore();
@@ -20,6 +20,7 @@ db.collection("users")
     if (snapshot.empty) {
       db.collection("users").doc("default").set({
         id: "0",
+        name: "Webmaster",
         username: "webmaster",
         sites: [],
         managedSites: [],
@@ -42,4 +43,4 @@ db.collection("sites")
     }
   });
 
-module.exports = db;
+export { db };
