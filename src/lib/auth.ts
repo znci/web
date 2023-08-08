@@ -3,7 +3,7 @@ import createError from "http-errors";
 import { db } from "./firebase.js";
 import * as Express from "express";
 
-async function check_user_key(user_id: string, key: string): Promise<boolean> {
+async function checkUserKey(user_id: string, key: string): Promise<boolean> {
   try {
     const snapshot = await db
       .collection("users")
@@ -24,7 +24,7 @@ async function check_user_key(user_id: string, key: string): Promise<boolean> {
   }
 }
 
-async function check_site_key(
+async function checkSiteKey(
   user_id: string,
   key: string,
   site_id: string
@@ -65,10 +65,10 @@ async function checkKeyValid(
   site_id: string | null = null
 ): Promise<boolean> {
   if (site_id === null) {
-    const res = await check_user_key(user_id, key);
+    const res = await checkUserKey(user_id, key);
     return res;
   } else {
-    const res = await check_site_key(user_id, key, site_id);
+    const res = await checkSiteKey(user_id, key, site_id);
     return res;
   }
 }
