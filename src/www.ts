@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 
-import { app }from "./app.js";
+import { app } from "./app.js";
 import debug from "debug";
 debug("web:server");
 import * as http from "http";

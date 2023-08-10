@@ -6,10 +6,10 @@
   "scripts": {
     "build": "tsc -b -v",
     "start": "node ./bin/www.js",
-    "dev": "nodemon -e ejs,ts,css tsc && ./bin/www.js",
-	"br": "tsc -b -v && node ./bin/www.js"
+    "dev": "nodemon"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^6.7.0",
     "api-key-auth": "^0.2.3",
     "cookie-parser": "~1.4.6",
     "cross-fetch": "^4.0.0",

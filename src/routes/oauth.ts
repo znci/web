@@ -6,7 +6,7 @@ import * as path from "path";
 import { configDotenv } from "dotenv";
 import { fetch } from "cross-fetch";
 
-const router = express.Router(); 
+const router = express.Router();
 
 router.get("/login", function (req, res, next) {
   res.redirect(

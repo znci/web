@@ -7,16 +7,19 @@
   <body>
     <h1>web &bull; dashboard</h1>
     <hr />
-    
+    <div id="err_container"></div>
 	<h2>My sites</h2>
 	<% if (sites.length > 0) { %>
 		<ul>
 			<% sites.forEach(function(site) { %>
-				<li><a href="<%= site.id %>"><%= site.name %></a></li>
+				<li>
+					<%= site %>
+					<button onclick="location.href='/dashboard/manage/<%= site %>'">Manage</button>
+				</li>
 			<% }); %>
 		</ul>
 	<% } else { %>
-		<p>You don't have any sites yet. <a href="new">Create one</a>.</p>
+		<p>You don't have any sites yet. <a id="newSite" href="#">Create one</a>.</p>
 	<% } %>
 
 	<h2>My account</h2>
@@ -33,6 +36,8 @@
 			Your API key: <span id="api_key">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
 		</p>
 		<input type="hidden" value="<%= us.apiKey %>" id="apikey_hidden">
+		<input type="hidden" value="<%= us.id %>" id="user_hidden">
+
 
 		
 	</p>
@@ -68,7 +73,6 @@
 
       </p>
     </footer>
-
 	<script src="/hosted/rs/tc.js"></script>
   </body>
 </html>

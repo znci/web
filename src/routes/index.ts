@@ -31,11 +31,32 @@ router.get("/dashboard", function (req, res, next) {
       if (snapshot.empty) {
         res.render("dashboard", { sites: [], us: req.session.user });
       }
-      let sites: SiteArray = [];
       snapshot.forEach((doc) => {
-        sites = doc.data().sites;
+        let sites = doc.data().sites;
+        console.log(sites);
+        res.render("dashboard", { sites: sites, us: req.session.user });
       });
-      res.render("dashboard", { sites: sites, us: req.session.user });
+    });
+});
+
+router.get("/dashboard/manage/:id", function (req, res, next) {
+  if (!req.session.user) {
+    return res.redirect("/oauth/login");
+  }
+  const { id } = req.params;
+  if (id.includes("..")) {
+    return next(createError(400, "bad request (invalid id)"));
+  }
+  db.collection("sites")
+    .where("id", "==", id)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        return next(createError(404, "not found"));
+      }
+      snapshot.forEach((doc) => {
+        res.render("manage", { site: doc.data(), us: req.session.user });
+      });
     });
 });
 

@@ -63,3 +63,20 @@ footer .right {
   padding: 10px;
   margin: 10px 0;
 }
+
+.error {
+  background-color: #ffe0e0;
+  border: 1px solid #db5555;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.block {
+  	border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.add_form {
+	display: none;
+}
