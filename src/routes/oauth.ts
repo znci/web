@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/login", function (req, res, next) {
   res.redirect(
-    `https://discord.com/api/oauth2/authorize?client_id=1137864637380034660&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Foauth%2Fcallback&response_type=code&scope=identify`
+    `https://discord.com/api/oauth2/authorize?client_id=1137864637380034660&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Foauth%2Fcallback&response_type=code&scope=identify`,
   );
 });
 

@@ -27,7 +27,7 @@ async function checkUserKey(user_id: string, key: string): Promise<boolean> {
 async function checkSiteKey(
   user_id: string,
   key: string,
-  site_id: string
+  site_id: string,
 ): Promise<boolean> {
   try {
     const siteSnapshot = await db
@@ -62,7 +62,7 @@ async function checkSiteKey(
 async function checkKeyValid(
   user_id: string,
   key: string,
-  site_id: string | null = null
+  site_id: string | null = null,
 ): Promise<boolean> {
   if (site_id === null) {
     const res = await checkUserKey(user_id, key);
@@ -76,7 +76,7 @@ async function checkKeyValid(
 function checker(
   req: Express.Request,
   res: Express.Response,
-  next: Express.NextFunction
+  next: Express.NextFunction,
 ): any {
   const headers = req.headers;
   const apiKey = Array.isArray(headers["x-api-key"])

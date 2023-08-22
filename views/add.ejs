@@ -8,14 +8,19 @@
     <h1>web &bull; manage</h1>
     <hr />
     <div id="err_container"></div>
-	<h2>Site Manager</h2>
-	<h3>Editing <%= site.id %></h3>
+	<h2>Add ading a block</h2>
+	<p>Editing <%= site.id %></p>
 	<hr>
 	<input type="hidden" id="site" value="<%= JSON.stringify(site) %>">
 	<input type="hidden" value="<%= us.apiKey %>" id="apikey_hidden">
 	<input type="hidden" value="<%= us.id %>" id="user_hidden">
-	<div id="content">
+
+
+	<div id="add_block">
 	</div>
+
+	
+
     <footer>
 		<hr>
       <p>
@@ -48,6 +53,6 @@
       </p>
     </footer>
 	<script src="/hosted/internal/base.js" async></script>
-	<script src="/hosted/internal/blockeditor.js" async></script>
+	<script src="/hosted/internal/add_block.js" async></script>
   </body>
 </html>

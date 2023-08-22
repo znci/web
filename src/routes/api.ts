@@ -7,6 +7,8 @@ import { zwss } from "../lib/zwss.js";
 import { checker } from "../lib/auth.js";
 import { FieldValue } from "@google-cloud/firestore";
 import { User, Site, SiteArray } from "../types/types.js";
+import { Buffer } from "buffer";
+import * as yaml from "js-yaml";
 
 const router: express.Router = express.Router();
 
@@ -40,29 +42,35 @@ router.get("/new", function (req, res, next) {
 router.get("/:id", function (req, res, next) {
   const { id } = req.params;
   if (id.includes("..")) {
-    return next(createError(400, "bad request (invalid id)"));
+    return Promise.reject(createError(400, "bad request (invalid id)")).catch(
+      (err) => next(err),
+    );
   }
   db.collection("sites")
     .where("id", "==", id)
     .get()
     .then((snapshot) => {
       if (snapshot.empty) {
-        return next(createError(404, "not found"));
+        return Promise.reject(createError(404, "not found")).catch((err) =>
+          next(err),
+        );
       }
-      snapshot.forEach((doc) => {
+      snapshot.forEach(async (doc) => {
         const b64_zwss = doc.data().b64_zwss;
-        const zwssFile = atob(b64_zwss as any); // TODO: Remove any
-        res.send(zwssFile);
+        const zwssFile = await atob(b64_zwss);
+        const zwss_json = yaml.load(zwssFile);
+        res.status(200).send(zwss_json);
       });
+    })
+    .catch((err) => {
+      next(err);
     });
 });
 
 /* Update ZWSS file. (add/remove blocks) */
-router.put("/:id", function (req, res, next) {
+router.put("/:id", async function (req, res, next) {
   const { id } = req.params;
   const { type, index } = req.query;
-  const { block } = req.body;
-  console.log(req.body);
 
   if (id.includes("..")) {
     return next(createError(400, "bad request (invalid id)"));
@@ -73,50 +81,63 @@ router.put("/:id", function (req, res, next) {
   }
 
   try {
-    db
-      .collection("sites")
-      .where("id", "==", id)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.empty) {
-          return next(createError(404, "not found"));
-        }
-        snapshot.forEach((doc) => {
-          const b64_zwss = doc.data().b64_zwss;
-          var zwssFile = atob(b64_zwss);
-		  
-          var zwssFile = atob(b64_zwss as any);
-        console.log(zwssFile);
+    const snapshot = await db.collection("sites").where("id", "==", id).get();
 
-        switch (type) {
-          case "add":
+    if (snapshot.empty) {
+      return next(createError(404, "not found"));
+    }
 
-            zwssFile = zwss.addBlock(zwssFile, block);
-            break;
-          case "remove":
-            if (!index) {
-              return next(createError(400, "bad request (missing index)"));
+    snapshot.forEach(async (doc) => {
+      const b64_zwss = doc.data().b64_zwss;
+      var zwssFile = atob(b64_zwss);
+
+      switch (type) {
+        case "add":
+          var bc = req.body;
+          console.log(typeof bc);
+          Object.keys(bc).forEach((key) => {
+            if (bc[key] === "") {
+              delete bc[key];
             }
-
-            zwssFile = zwss.removeBlock(zwssFile, index as unknown as number);
-            break;
-          default:
-            res.status(400).send({
-              msg: "bad request (invalid type)",
-              meta: "https://http.cat/400",
-            });
-        }
-
-        db.collection("sites")
-          .doc(id)
-          .update({
-            b64_zwss: btoa(zwssFile),
+          });
+          console.log(bc);
+          zwss.addBlock(zwssFile, bc as object).then((newZWSS) => {
+            db.collection("sites")
+              .doc(id)
+              .update({
+                b64_zwss: btoa(newZWSS),
+              })
+              .then(() => {
+                res.status(200).send({ msg: "ok" });
+              });
           });
 
-        res.status(200).send({ msg: "ok" });
-        });
-        
-      });
+          break;
+        case "remove":
+          if (!index) {
+            return next(createError(400, "bad request (missing index)"));
+          }
+
+          zwss
+            .removeBlock(zwssFile, index as unknown as number)
+            .then((newZWSS) => {
+              db.collection("sites")
+                .doc(id)
+                .update({
+                  b64_zwss: btoa(newZWSS),
+                })
+                .then(() => {
+                  res.status(200).send({ msg: "ok" });
+                });
+            });
+          break;
+        default:
+          res.status(400).send({
+            msg: "bad request (invalid type)",
+            meta: "https://http.cat/400",
+          });
+      }
+    });
   } catch (err) {
     return next(createError(500, "internal server error"));
   }

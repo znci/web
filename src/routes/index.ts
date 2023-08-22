@@ -60,6 +60,27 @@ router.get("/dashboard/manage/:id", function (req, res, next) {
     });
 });
 
+router.get("/dashboard/manage/:id/add", function (req, res, next) {
+  if (!req.session.user) {
+    return res.redirect("/oauth/login");
+  }
+  const { id } = req.params;
+  if (id.includes("..")) {
+    return next(createError(400, "bad request (invalid id)"));
+  }
+  db.collection("sites")
+    .where("id", "==", id)
+    .get()
+    .then((snapshot) => {
+      if (snapshot.empty) {
+        return next(createError(404, "not found"));
+      }
+      snapshot.forEach((doc) => {
+        res.render("add", { site: doc.data(), us: req.session.user });
+      });
+    });
+});
+
 router.get("/:page", function (req, res, next) {
   const { page } = req.params;
 

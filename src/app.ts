@@ -27,7 +27,7 @@ app.use(express.static(path.join(dirname("src"), "public")));
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
-  })
+  }),
 );
 app.use("/", indexRouter);
 app.use("/api", apiRouter);

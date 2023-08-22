@@ -5,16 +5,13 @@
 
 import yaml from "yaml";
 import { v4 as uuidv4 } from "uuid";
-import { z } from "zod";
 import { ZwssYaml, Block } from "../types/types.js";
 
 type zwss = {
-  validateObject: (doc: object) => object;
-  validateString: (contents: string) => object;
   render: (contents: string) => string;
   generate: () => { contents: string; id: string };
-  addBlock: (contents: string, block: object) => string;
-  removeBlock: (oldContents: string, index: number) => string;
+  addBlock: (contents: string, block: object) => Promise<string>;
+  removeBlock: (oldContents: string, index: number) => Promise<string>;
 };
 
 let zwss: zwss = {} as zwss;
@@ -25,39 +22,6 @@ let zwss: zwss = {} as zwss;
  * @returns ZWSS object
  * @throws {Error} Will throw an error if the document does not match the schema
  */
-zwss.validateObject = function (doc) {
-  const schema = z.object({
-    type: z.string(),
-    title: z.string(),
-    id: z.string().uuid(),
-    body: z.object({
-      blocks: z
-        .union([
-          z.object({
-            type: z.literal("heading"),
-            text: z.string(),
-          }),
-          z.object({
-            type: z.literal("paragraph"),
-            text: z.string(),
-          }),
-          z.object({
-            type: z.literal("image"),
-            url: z.string().url(),
-            alt: z.string(),
-          }),
-          z.object({
-            type: z.literal("link"),
-            url: z.string().url(),
-            text: z.string(),
-          }),
-        ])
-        .array(),
-    }),
-  });
-
-  return schema.parse(doc);
-};
 
 /**
  * Validate a ZWSS file from a string
@@ -65,17 +29,6 @@ zwss.validateObject = function (doc) {
  * @returns ZWSS object
  * @throws {Error} Will throw an error if the document does not match the schema
  */
-zwss.validateString = function (contents): ZwssYaml {
-  let doc;
-
-  try {
-    doc = yaml.parse(contents);
-  } catch (e) {
-    throw new Error("Invalid ZWSS file.");
-  }
-
-  return zwss.validateObject(doc)! as ZwssYaml;
-};
 
 /**
  * Render a ZWSS file to HTML.
@@ -84,13 +37,7 @@ zwss.validateString = function (contents): ZwssYaml {
  * @throws {Error} Will throw an error if the document is invalid
  */
 zwss.render = function (contents) {
-  let doc: ZwssYaml;
-
-  try {
-    doc = zwss.validateString(contents)! as ZwssYaml;
-  } catch (e) {
-    throw new Error(`Invalid ZWSS file: ${e}`);
-  }
+  let doc: ZwssYaml = yaml.parse(contents);
 
   let html = "";
 
@@ -100,7 +47,7 @@ zwss.render = function (contents) {
     <head>
     <title>${doc.title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/hosted/rs/tc.css">
+    <link rel="stylesheet" href="/hosted/Site.css">
     ${
       doc.personalStylesheet
         ? `<link rel="stylesheet" href="/public/hosted/${doc.personalStylesheet}">`
@@ -176,24 +123,12 @@ zwss.generate = function () {
  * @param {object} block Block to add
  * @returns ZWSS formatted YAML
  */
-zwss.addBlock = function (contents, block) {
-  let doc: ZwssYaml;
-
-  try {
-    doc = zwss.validateString(contents)! as ZwssYaml;
-  } catch (e) {
-    throw new Error(e as unknown as string);
-  }
-
-  doc.body.blocks.push(block as unknown as Block);
-
-  try {
-    zwss.validateString(doc as unknown as string);
-  } catch (e) {
-    throw new Error(e as unknown as string);
-  }
-
-  return yaml.stringify(doc);
+zwss.addBlock = function (contents, block): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let doc: ZwssYaml = yaml.parse(contents);
+    doc.body.blocks.push(block as Block);
+    resolve(yaml.stringify(doc));
+  });
 };
 
 /**
@@ -202,21 +137,17 @@ zwss.addBlock = function (contents, block) {
  * @param {number} index Index of block to remove
  * @returns ZWSS formatted YAML
  */
-zwss.removeBlock = function (oldContents, index) {
-  let doc;
+zwss.removeBlock = function (oldContents, index): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let doc: ZwssYaml = yaml.parse(oldContents);
 
-  try {
-    doc = yaml.parse(oldContents);
-  } catch (e) {
-    throw new Error("Invalid ZWSS file.");
-  }
+    if (index > doc.body.blocks.length) {
+      reject(new Error("Index out of range"));
+    }
 
-  if (index > doc.body.blocks.length) {
-    throw new Error("Invalid index.");
-  }
-
-  doc.body.blocks.splice(index, 1);
-  return yaml.stringify(doc);
+    doc.body.blocks.splice(index, 1);
+    resolve(yaml.stringify(doc));
+  });
 };
 
 export { zwss };

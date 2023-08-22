@@ -72,11 +72,60 @@ footer .right {
 }
 
 .block {
-  	border: 1px solid #ccc;
+  border: 1px solid #ccc;
   padding: 10px;
   margin: 10px 0;
 }
 
+.blocklabel {
+  /* top-left corner of block,  kind of like footer text */
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  padding: 0;
+}
+
+.blockactionrow {
+  /* two buttons, bottom right of block */
+  text-align: right;
+  margin: 10px 0;
+  padding: 0;
+
+  /* make buttons inline */
+  display: inline-block;
+}
+
+.blockactionrow a {
+  /* buttons */
+  margin: 0 5px;
+  font-size: 13px;
+}
+
 .add_form {
-	display: none;
+  display: none;
+}
+
+/* Buttons */
+button {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 3px;
+}
+
+button .primary {
+  background-color: #008cba;
+  color: #fff;
+}
+
+button .danger {
+  background-color: #db5555;
+  color: #fff;
+}
+
+button .success {
+  background-color: #5cb85c;
+  color: #fff;
 }
