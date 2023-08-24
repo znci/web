@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>web &bull; dashboard</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>web &bull; dashboard</h1>
+    <hr />
+    <div id="err_container"></div>
+	<h2>My sites</h2>
+	<% if (sites.length > 0) { %>
+		<ul>
+			<% sites.forEach(function(site) { %>
+				<li>
+					<%= site %>
+					<button onclick="location.href='/dashboard/manage/<%= site %>'">Manage</button>
+				</li>
+			<% }); %>
+		</ul>
+	<% } else { %>
+		<p>You don't have any sites yet. <a id="newSite" href="#">Create one</a>.</p>
+	<% } %>
+
+	<h2>My account</h2>
+	<p>
+		Username: <%= us.username %>
+		<br>
+		ID: <%= us.id %>
+		<br>
+		<div class="warning">
+			<strong>Warning:</strong> Your API key is secret. Do not share it with anyone.
+		</div>
+		<!-- hidden input with api key -->
+		<p>
+			Your API key: <span id="api_key">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+		</p>
+		<input type="hidden" value="<%= us.apiKey %>" id="apikey_hidden">
+		<input type="hidden" value="<%= us.id %>" id="user_hidden">
+
+
+		
+	</p>
+
+    <footer>
+		<hr>
+      <p>
+		<div class="right">
+		<p>
+			<strong>web</strong> <p>A <a href="https://znci.dev"><strong>znci</strong></a> project</p>
+		</p>
+		</div>
+        
+		<div class="left">
+		<% if (us) { %>
+			<% us %>
+			<p>Hi, <strong><%= us.username %></strong>! (<%= us.id %>)</p>
+		<%} else { %>
+			<p>Hi there! Please login.</p>
+		<% } %>
+
+			&bull; <a href="dashboard">dashboard</a> 
+		<br>
+		&bull; 
+		<% if (us) { %>
+			<a href="/oauth/logout">logout</a>
+		<%} else { %>
+			<a href="/oauth/login">login</a>
+		<% } %>
+		</div>
+
+
+
+      </p>
+    </footer>
+	<script src="/hosted/internal/base.js"></script>
+	<script src="/hosted/internal/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>web &bull; manage</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>web &bull; manage</h1>
+    <hr />
+    <div id="err_container"></div>
+	<h2>Site Manager</h2>
+	<h3>Editing <%= site.id %></h3>
+	<hr>
+	<input type="hidden" id="site" value="<%= JSON.stringify(site) %>">
+	<input type="hidden" value="<%= us.apiKey %>" id="apikey_hidden">
+	<input type="hidden" value="<%= us.id %>" id="user_hidden">
+	<div id="content">
+	</div>
+    <footer>
+		<hr>
+      <p>
+		<div class="right">
+		<p>
+			<strong>web</strong> <p>A <a href="https://znci.dev"><strong>znci</strong></a> project</p>
+		</p>
+		</div>
+        
+		<div class="left">
+		<% if (us) { %>
+			<% us %>
+			<p>Hi, <strong><%= us.username %></strong>! (<%= us.id %>)</p>
+		<%} else { %>
+			<p>Hi there! Please login.</p>
+		<% } %>
+
+			&bull; <a href="dashboard">dashboard</a> 
+		<br>
+		&bull; 
+		<% if (us) { %>
+			<a href="/oauth/logout">logout</a>
+		<%} else { %>
+			<a href="/oauth/login">login</a>
+		<% } %>
+		</div>
+
+
+
+      </p>
+    </footer>
+	<script src="/hosted/internal/base.js" async></script>
+	<script src="/hosted/internal/blockeditor.js" async></script>
+  </body>
+</html>

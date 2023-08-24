@@ -70,3 +70,6 @@ serviceAccountKey.json
 # ts
 bin/
 
+# other
+chat.txt
+

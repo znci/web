@@ -1,0 +1,131 @@
+/* root styles */
+
+:root {
+  --body-text-color: #444;
+  --body-bg-color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-text-color: #fff;
+    --body-bg-color: #444;
+  }
+}
+
+body {
+  margin: 40px auto;
+  max-width: 650px;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
+  padding: 0 10px;
+  font-family: sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+.marketing_get_started {
+  /* this is what the user clicks to get started */
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Footer should have 2 columns */
+
+footer .left {
+  float: left;
+}
+
+footer .right {
+  float: right;
+}
+
+/* Warning box (yellow) */
+
+.warning {
+  background-color: #ffffe0;
+  border: 1px solid #e6db55;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.error {
+  background-color: #ffe0e0;
+  border: 1px solid #db5555;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.block {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.blocklabel {
+  /* top-left corner of block,  kind of like footer text */
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  padding: 0;
+}
+
+.blockactionrow {
+  /* two buttons, bottom right of block */
+  text-align: right;
+  margin: 10px 0;
+  padding: 0;
+
+  /* make buttons inline */
+  display: inline-block;
+}
+
+.blockactionrow a {
+  /* buttons */
+  margin: 0 5px;
+  font-size: 13px;
+}
+
+.add_form {
+  display: none;
+}
+
+/* Buttons */
+button {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 3px;
+}
+
+button .primary {
+  background-color: #008cba;
+  color: #fff;
+}
+
+button .danger {
+  background-color: #db5555;
+  color: #fff;
+}
+
+button .success {
+  background-color: #5cb85c;
+  color: #fff;
+}

@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "ext": "ts,css",
+  "ignore": ["node_modules"],
+  "exec": "tsc -b -v && node bin/www.js"
+}
