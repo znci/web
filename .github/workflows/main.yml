@@ -1,11 +1,16 @@
-name: test
+name: CI
 on: push
 jobs:
   my-job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: TypeScript report
+      - name: Backend Check
         uses: fersilva16/ts-report-action@1.1.0
         with:
-          project: tsconfig.json
+          project: ./pkg/backend/tsconfig.json
+      - uses: actions/checkout@v3
+      - name: Frontend Check
+        uses: fersilva16/ts-report-action@1.1.0
+        with:
+          project: ./pkg/frontend/tsconfig.json

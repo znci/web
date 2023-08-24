@@ -6,7 +6,7 @@
     "target": "ES2022",
     "esModuleInterop": true,
     "strict": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "module": "ES2022"
   },
   "include": ["./src/**/*"]
